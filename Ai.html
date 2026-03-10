@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SHUBH - Virtual Assistant</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; align-items: center; justify-content: center; }
+        .premium { color: gold; font-weight: bold; position: absolute; top: 20px; letter-spacing: 2px; text-shadow: 0 0 10px gold; }
+        
+        /* Animation Styles */
+        .main-ai { position: relative; display: flex; flex-direction: column; align-items: center; }
+        .ai-video { width: 250px; z-index: 5; filter: drop-shadow(0 0 20px #00f2ff); border-radius: 20px; }
+        
+        #status { margin-top: 20px; color: #00f2ff; font-size: 18px; height: 30px; }
+        #startBtn { padding: 15px 30px; background: #00f2ff; color: #000; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px #00f2ff; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="premium">PREMIUM AI</div>
+
+    <div class="main-ai">
+        <video id="aiVideo" class="ai-video" loop muted playsinline>
+            <source src="1000155954.mp4" type="video/mp4">
+        </video>
+        
+        <p id="status">Click niche button par karein</p>
+        <button id="startBtn">AI Start Karein</button>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const status = document.getElementById('status');
+        const video = document.getElementById('aiVideo');
+
+        // Speech Recognition Setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (!SpeechRecognition) {
+            alert("Aapka browser support nahi kar raha. Chrome use karein!");
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'hi-IN'; // Hindi Language
+            recognition.continuous = true;
+
+            // Start Button Logic
+            startBtn.onclick = () => {
+                recognition.start();
+                video.play(); // Video start karein
+                status.innerText = "Sun raha hoon... 'Shubh' boliye";
+                startBtn.style.display = 'none'; // Button gayab
+            };
+
+            recognition.onresult = (event) => {
+                const speech = event.results[event.results.length - 1][0].transcript.toLowerCase();
+                console.log("Aapne kaha:", speech);
+
+                if (speech.includes("shubh")) {
+                    speak("Ji, main hazir hoon. Bataiye aaj ka din kaisa raha?");
+                } 
+                else if (speech.includes("kaise ho")) {
+                    speak("Main bahut achhi hoon, aap kaise hain?");
+                }
+                else if (speech.includes("ghar aa gaye")) {
+                    speak("Haan, main toh kab ki ghar aa gayi thi!");
+                }
+            };
+
+            // AI Bolne ka Function
+            function speak(text) {
+                const synth = window.speechSynthesis;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'hi-IN';
+                utterance.pitch = 1.3; // Thodi soft voice ke liye
+
+                status.innerText = "Shubh bol rahi hai...";
+                
+                // Jab AI bolega tab video volume full (unmute) kar sakte hain agar video mein awaaz hai
+                synth.speak(utterance);
+
+                utterance.onend = () => {
+                    status.innerText = "Sun raha hoon... 'Shubh' boliye";
+                };
+            }
+            
+            // Error handling
+            recognition.onerror = (err) => {
+                console.error(err);
+                status.innerText = "Mic error! Dobara koshish karein.";
+            };
+        }
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SHUBH - Virtual Assistant</title>
+    <style>
+        body { margin: 0; background: #000; color: #fff; font-family: sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* Premium Header */
+        .premium { color: gold; font-weight: bold; text-align: center; padding: 15px; border-bottom: 1px solid #222; letter-spacing: 2px; text-shadow: 0 0 10px gold; }
+        
+        /* Main Container */
+        .main-ai { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        
+        /* Background HUD Rings */
+        .hud-ring {
+            position: absolute; width: 320px; height: 320px;
+            border: 2px solid rgba(0, 242, 255, 0.1);
+            border-radius: 50%; animation: spin 15s linear infinite;
+        }
+        .hud-ring::after {
+            content: ''; position: absolute; top: -5px; left: 50%; 
+            width: 10px; height: 10px; background: cyan; border-radius: 50%; box-shadow: 0 0 15px cyan;
+        }
+
+        /* Your Downloaded Video Animation */
+        .ai-video {
+            width: 250px; z-index: 5;
+            filter: drop-shadow(0 0 30px #00f2ff) contrast(1.1); /* Glow Effect */
+            border-radius: 20px;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Locked Section */
+        .locked-area { font-size: 13px; color: #444; text-align: center; margin-bottom: 30px; border: 1px dashed #222; padding: 10px; width: 80%; margin-left: auto; margin-right: auto; }
+
+        /* Watermark */
+        .watermark { position: absolute; bottom: 15px; width: 100%; text-align: center; opacity: 0.3; font-size: 14px; letter-spacing: 3px; }
+    </style>
+</head>
+<body>
+
+    <div class="premium">PREMIUM AI</div>
+
+    <div class="main-ai">
+        <div class="hud-ring"></div>
+        
+        <video class="ai-video" autoplay loop muted playsinline>
+            <source src="girl_animation.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        
+        <p id="status" style="margin-top: 25px; color: #00f2ff; letter-spacing: 1px;">Listening for "Shubh"...</p>
+    </div>
+
+    <div class="locked-area">
+        🔒 Premium Feature Locked<br>
+        <span style="font-size: 10px;">"Kaise ho bachha, ghar aa gaye?"</span>
+    </div>
+
+    <div class="watermark">Heyyyy....</div>
+
+    <script>
+        // Voice Recognition Logic
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.continuous = true;
+        recognition.lang = 'hi-IN';
+
+        recognition.onresult = (event) => {
+            const speech = event.results[event.results.length - 1][0].transcript.toLowerCase();
+            if(speech.includes("shubh")) {
+                document.getElementById('status').innerText = "Shubh is Responding...";
+                speak("Ji, main hazir hoon. Aaj ka din kaisa tha?");
+            }
+        };
+
+        function speak(text) {
+            const speech = new SpeechSynthesisUtterance(text);
+            speech.lang = 'hi-IN';
+            speech.pitch = 1.2; // Thodi ladki jaisi voice ke liye
+            window.speechSynthesis.speak(speech);
+            
+            speech.onend = () => {
+                document.getElementById('status').innerText = 'Listening for "Shubh"...';
+            };
+        }
+
+        recognition.start();
+    </script>
+</body>
+</html>
+
